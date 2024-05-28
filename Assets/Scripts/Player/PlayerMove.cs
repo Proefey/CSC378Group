@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float moveSpeed = 0.25f;
-    public float lookBoost = 2f;
+    private float moveSpeed = 2f;
+    private float lookBoost = 2f;
 
     [SerializeField] private Rigidbody2D rb;
 
@@ -36,11 +36,11 @@ public class PlayerMove : MonoBehaviour
 
         float speed = moveSpeed;
 
-        Debug.Log(Vector2.Dot(movementDirection, playerToMouseDirection));
         if(Vector2.Dot(movementDirection, playerToMouseDirection) > 0.75f){
             speed *= lookBoost;
         }
 
         rb.velocity = movement * speed;
+        Debug.Log($"{rb.velocity} {speed} {movement}");
     }
 }
