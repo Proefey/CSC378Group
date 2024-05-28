@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    public float moveSpeed = 0.25f;
+    public float lookBoost = 2f;
 
     [SerializeField] private Rigidbody2D rb;
 
@@ -29,6 +30,17 @@ public class PlayerMove : MonoBehaviour
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
 
-        rb.velocity = movement * moveSpeed;
+        Vector2 movementDirection = movement.normalized;
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 playerToMouseDirection = (mousePosition - rb.position).normalized;
+
+        float speed = moveSpeed;
+
+        Debug.Log(Vector2.Dot(movementDirection, playerToMouseDirection));
+        if(Vector2.Dot(movementDirection, playerToMouseDirection) > 0.75f){
+            speed *= lookBoost;
+        }
+
+        rb.velocity = movement * speed;
     }
 }
