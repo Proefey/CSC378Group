@@ -41,6 +41,5 @@ public class PlayerMove : MonoBehaviour
         }
 
         rb.velocity = movement * speed;
-        Debug.Log($"{rb.velocity} {speed} {movement}");
     }
 }
