@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    private float moveSpeed = 2f;
+    private float moveSpeed = 1f;
     private float lookBoost = 2f;
 
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] AudioSource audioSource;
 
     void Start()
     {
@@ -16,17 +17,22 @@ public class PlayerMove : MonoBehaviour
         {
             Debug.LogError("No Rigidbody found on " + gameObject.name);
         }
+        audioSource.Play();
+        audioSource.Pause();
     }
 
     void Update()
     {
         Move();
+        
     }
 
     void Move()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
+        if(moveHorizontal + moveVertical > 0.01f) {audioSource.Play();}
+        else {audioSource.Pause();}
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
 
