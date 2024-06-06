@@ -29,7 +29,7 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
+        IsPlayerLookingAtEnemy();
         if (distanceToPlayer <= detectionRadius)
         {
             isChasing = true;
@@ -41,7 +41,7 @@ public class EnemyAI : MonoBehaviour
             Wander();
         }
 
-        Debug.Log(isChasing);
+        //Debug.Log(isChasing);
         if (isChasing && distanceToPlayer <= attackRange)
         {
             AttackPlayer();
@@ -87,5 +87,22 @@ public class EnemyAI : MonoBehaviour
         // Draw the attack range in the editor
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
+    private bool IsPlayerLookingAtEnemy()
+    {
+        Vector3 mousePos = Input.mousePosition;
+        Vector3 playerScreenPos = Camera.main.WorldToScreenPoint(player.position);
+        Vector3 enemyScreenPos = Camera.main.WorldToScreenPoint(transform.position);
+
+        Vector2 playerToMouse = (mousePos - playerScreenPos).normalized;
+        Vector2 playerToEnemy = (enemyScreenPos - playerScreenPos).normalized;
+
+        float angle = Vector2.Angle(playerToMouse, playerToEnemy);
+
+        // Assume the player is looking at the enemy if the angle is less than a certain threshold
+        float lookAngleThreshold = 30f;
+        Debug.Log(angle);
+        return angle < lookAngleThreshold;
     }
 }

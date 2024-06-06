@@ -20,6 +20,6 @@ public class Flashlight : MonoBehaviour
 
         Vector2 direction = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
 
-        transform.up = Vector2.MoveTowards(transform.up, direction, 0.02f);
+        transform.up = direction;
     }
 }
