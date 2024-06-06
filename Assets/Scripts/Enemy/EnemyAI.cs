@@ -7,7 +7,7 @@ public class EnemyAI : MonoBehaviour
     public float wanderSpeed = 2f;
     public float chaseSpeed = 1f;
     public float detectionRadius = 1.2f;
-    public float attackRange = .5f;
+    public float attackRange = 0.5f;
     public int damage = 10;
     public float wanderTime = 1f;
 
@@ -20,7 +20,15 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null)
+        {
+            player = playerObject.transform;
+        }
+        else
+        {
+            Debug.LogError("Player object not found!");
+        }
         ChooseNewWanderDirection();
         audioSource.Play();
         audioSource.Pause();
@@ -28,23 +36,31 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-        if (distanceToPlayer <= detectionRadius)
+        if (player != null)
         {
-            isChasing = true;
-            ChasePlayer();
+            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+            if (distanceToPlayer <= detectionRadius)
+            {
+                isChasing = true;
+                ChasePlayer();
+            }
+            else
+            {
+                isChasing = false;
+                Wander();
+            }
+
+            if (isChasing && distanceToPlayer <= attackRange)
+            {
+                AttackPlayer();
+            }
         }
         else
         {
+            // Handle case when player is null (e.g., player destroyed)
             isChasing = false;
             Wander();
-        }
-
-        Debug.Log(isChasing);
-        if (isChasing && distanceToPlayer <= attackRange)
-        {
-            AttackPlayer();
         }
     }
 
@@ -67,15 +83,21 @@ public class EnemyAI : MonoBehaviour
 
     void ChasePlayer()
     {
-        Vector2 directionToPlayer = (player.position - transform.position).normalized;
-        transform.position += (Vector3)(directionToPlayer * chaseSpeed * Time.deltaTime);
+        if (player != null)
+        {
+            Vector2 directionToPlayer = (player.position - transform.position).normalized;
+            transform.position += (Vector3)(directionToPlayer * chaseSpeed * Time.deltaTime);
+        }
     }
 
     void AttackPlayer()
     {
-        // Assuming the player has a method called TakeDamage(int damage)
-       // player.GetComponent<PlayerHealth>().TakeDamage(damage);
-       audioSource.Play();
+        if (player != null)
+        {
+            // Assuming the player has a method called TakeDamage(int damage)
+            // player.GetComponent<PlayerHealth>().TakeDamage(damage);
+            audioSource.Play();
+        }
     }
 
     void OnDrawGizmosSelected()
