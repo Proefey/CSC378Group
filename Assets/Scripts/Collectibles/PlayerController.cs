@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     private int itemCount = 0;
     public HUDController hudController; // Ensure this is public or [SerializeField]
+    public CameraBehav camerabehav;
 
     void Start()
     {
@@ -23,6 +25,8 @@ public class PlayerController : MonoBehaviour
         if (hudController != null)
         {
             hudController.UpdateItemCounter(itemCount);
+            if(itemCount >= 4) camerabehav.setbegin();
+            if(itemCount >= 5) SceneManager.LoadScene(0);
         }
         else
         {

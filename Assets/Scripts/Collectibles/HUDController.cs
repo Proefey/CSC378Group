@@ -12,7 +12,7 @@ public class HUDController : MonoBehaviour
         
         itemCounterText.text = "Collected: " + count.ToString();
         Debug.Log("HUD Updated: Items = " + count);
-        if(count >= 5){
+        if(count >= 4){
             Camera.main.backgroundColor = new Color(0.3f, 0f, 0f);
         }
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class EnemyAI : MonoBehaviour
     private Vector3 wanderDirection;
     private float wanderTimer;
     private bool isChasing = false;
+    private float timer;
 
     [SerializeField] AudioSource audioSource;
 
@@ -29,7 +31,11 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        IsPlayerLookingAtEnemy();
+        if (IsPlayerLookingAtEnemy() && distanceToPlayer <= 5){
+            timer += Time.deltaTime;
+            return;
+        }
+        else timer = 0;
         if (distanceToPlayer <= detectionRadius)
         {
             isChasing = true;
@@ -76,6 +82,7 @@ public class EnemyAI : MonoBehaviour
         // Assuming the player has a method called TakeDamage(int damage)
        // player.GetComponent<PlayerHealth>().TakeDamage(damage);
        audioSource.Play();
+       SceneManager.LoadScene(0);
     }
 
     void OnDrawGizmosSelected()
@@ -102,7 +109,6 @@ public class EnemyAI : MonoBehaviour
 
         // Assume the player is looking at the enemy if the angle is less than a certain threshold
         float lookAngleThreshold = 30f;
-        Debug.Log(angle);
         return angle < lookAngleThreshold;
     }
 }
