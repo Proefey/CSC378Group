@@ -7,35 +7,95 @@ public class EnemyAI : MonoBehaviour
 {
     public float wanderSpeed = 2f;
     public float chaseSpeed = 1f;
+    //Slow down enemy while player looks at them
+    private float chaseMultiplier = 1f;
     public float detectionRadius = 1.2f;
     public float attackRange = .5f;
     public int damage = 10;
     public float wanderTime = 1f;
 
     private Transform player;
+    private Transform enemy;
     private Vector3 wanderDirection;
     private float wanderTimer;
     private bool isChasing = false;
     private float timer;
+    private float angertimer;
+    private bool angry = false;
+
+    //Scale Difficulty
+    private int itemcount = 0;
+    private int prevcount = 1;
 
     [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioSource flashlightDistortion;
+    [SerializeField] AudioSource angryScream;
+    public PlayerController itemcounter;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        enemy = GameObject.FindGameObjectWithTag("Enemy").transform;
         ChooseNewWanderDirection();
         audioSource.Play();
         audioSource.Pause();
     }
 
     void Update()
-    {
+    {  
+        Debug.Log(flashlightDistortion.isPlaying);
+        //Handle Anger
+        if(angry){
+            angertimer += Time.deltaTime;
+            if (angertimer >= 10){
+                angryScream.Pause();
+                angertimer = 0;
+                angry = false;
+            }
+        }
+        //Reset Enemy To Middle
+        itemcount = itemcounter.getItemCount();
+        if (itemcount > 0 && itemcount != prevcount){
+            enemy.transform.position = new Vector2(2f,4f);
+            prevcount = itemcount;
+            return;
+        }
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
         if (IsPlayerLookingAtEnemy() && distanceToPlayer <= 5){
             timer += Time.deltaTime;
-            return;
+            switch(itemcount){
+                case 0:
+                case 1:
+                    chaseMultiplier = 0f;
+                    break;
+                case 2:
+                    chaseMultiplier = 0.25f;
+                    break;
+                case 3:
+                    chaseMultiplier = 0.5f;
+                    break;
+                default:
+                    chaseMultiplier = 0.75f;
+                    break;
+            }
+            if (timer >= 5){
+                if (!angryScream.isPlaying) angryScream.Play();
+                angry = true;
+            }
         }
-        else timer = 0;
+        else {
+            timer = 0;
+            chaseMultiplier = 1f;
+        }
+
+        if (distanceToPlayer <= 5){
+            float volume = distanceToPlayer / 10;
+            flashlightDistortion.volume = volume;
+            if (!flashlightDistortion.isPlaying) flashlightDistortion.Play();
+        }
+        else{
+            flashlightDistortion.Pause();
+        }
         if (distanceToPlayer <= detectionRadius)
         {
             isChasing = true;
@@ -73,8 +133,9 @@ public class EnemyAI : MonoBehaviour
 
     void ChasePlayer()
     {
+        if(angry) chaseMultiplier = 1.0f;
         Vector2 directionToPlayer = (player.position - transform.position).normalized;
-        transform.position += (Vector3)(directionToPlayer * chaseSpeed * Time.deltaTime);
+        transform.position += (Vector3)(directionToPlayer * chaseSpeed * chaseMultiplier * Time.deltaTime);
     }
 
     void AttackPlayer()
@@ -96,8 +157,7 @@ public class EnemyAI : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
-    private bool IsPlayerLookingAtEnemy()
-    {
+    private bool IsPlayerLookingAtEnemy(){
         Vector3 mousePos = Input.mousePosition;
         Vector3 playerScreenPos = Camera.main.WorldToScreenPoint(player.position);
         Vector3 enemyScreenPos = Camera.main.WorldToScreenPoint(transform.position);
@@ -107,8 +167,12 @@ public class EnemyAI : MonoBehaviour
 
         float angle = Vector2.Angle(playerToMouse, playerToEnemy);
 
-        // Assume the player is looking at the enemy if the angle is less than a certain threshold
         float lookAngleThreshold = 30f;
         return angle < lookAngleThreshold;
     }
+
+    private void handleItemCounter(){
+
+    }
+
 }

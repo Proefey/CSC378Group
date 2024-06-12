@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     private float moveSpeed = 1f;
-    private float lookBoost = 2.25f;
+    private float lookBoost = 2f;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] AudioSource audioSource;

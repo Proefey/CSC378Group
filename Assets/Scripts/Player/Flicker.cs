@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 
 public class Flicker : MonoBehaviour
@@ -32,9 +33,15 @@ public class Flicker : MonoBehaviour
                     minCollectibleDistance = dist;
                 }
             }
-            if(distanceToEnemy <= 7.5) randomIntensity = Random.Range(0f, 3.5f);
-            if(IsPlayerLookingAtCollectible(collectibles[minindex].transform) && minCollectibleDistance < 20) randomIntensity = Random.Range(0f, 3.5f);
+            if(distanceToEnemy <= 7.5f && !IsPlayerLookingAtEnemy()) randomIntensity = Random.Range(0f, 2f);
             flashlight.intensity = randomIntensity;
+            
+            if(IsPlayerLookingAtCollectible(collectibles[minindex].transform) && minCollectibleDistance < 20){
+                flashlight.color = new Color(0.3f, 0f, 0f);
+            } 
+            else{
+                flashlight.color = new Color(0.5f, 0.5f, 0.5f);
+            }
 
 
             float randomTime = Random.Range(0f, 0.1f);
@@ -57,4 +64,19 @@ public class Flicker : MonoBehaviour
         float lookAngleThreshold = 30f;
         return angle < lookAngleThreshold;
     }
+
+    private bool IsPlayerLookingAtEnemy(){
+        Vector3 mousePos = Input.mousePosition;
+        Vector3 playerScreenPos = Camera.main.WorldToScreenPoint(transform.position);
+        Vector3 enemyScreenPos = Camera.main.WorldToScreenPoint(enemy.position);
+
+        Vector2 playerToMouse = (mousePos - playerScreenPos).normalized;
+        Vector2 playerToEnemy = (enemyScreenPos - playerScreenPos).normalized;
+
+        float angle = Vector2.Angle(playerToMouse, playerToEnemy);
+
+        float lookAngleThreshold = 30f;
+        return angle < lookAngleThreshold;
+    }
+
 }
