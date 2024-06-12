@@ -9,6 +9,7 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] AudioSource audioSource;
+    public Animator animator;
 
     void Start()
     {
@@ -29,9 +30,11 @@ public class PlayerMove : MonoBehaviour
 
     void Move()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
-        if(moveHorizontal + moveVertical > 0.01f) {audioSource.Play();}
+        float moveHorizontal = (Input.GetAxis("Horizontal"));
+        float moveVertical = (Input.GetAxis("Vertical"));
+        if(Mathf.Abs(moveHorizontal) + Mathf.Abs(moveVertical) > 0.01f) {
+            audioSource.Play();
+        }
         else {audioSource.Pause();}
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
@@ -47,5 +50,6 @@ public class PlayerMove : MonoBehaviour
         }
 
         rb.velocity = movement * speed;
+        animator.SetFloat("PlayerSpeed", (Mathf.Abs(moveHorizontal) + Mathf.Abs(moveVertical)) * speed);
     }
 }

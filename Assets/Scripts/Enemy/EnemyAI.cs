@@ -43,7 +43,6 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {  
-        Debug.Log(flashlightDistortion.isPlaying);
         //Handle Anger
         if(angry){
             angertimer += Time.deltaTime;
@@ -112,6 +111,10 @@ public class EnemyAI : MonoBehaviour
         {
             AttackPlayer();
         }
+
+        //Random Direction Rotation
+        Vector2 direction = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+        transform.up = direction;
     }
 
     void Wander()

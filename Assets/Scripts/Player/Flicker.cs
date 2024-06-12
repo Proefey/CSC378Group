@@ -76,6 +76,7 @@ public class Flicker : MonoBehaviour
         float angle = Vector2.Angle(playerToMouse, playerToEnemy);
 
         float lookAngleThreshold = 30f;
+        Debug.Log(angle);
         return angle < lookAngleThreshold;
     }
 

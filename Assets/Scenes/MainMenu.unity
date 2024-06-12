@@ -716,7 +716,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'You have woken up at the dead of night in a forest, without knowing where
     you came from or why you are here. You must collect 5 pages scattered throughout
-    the forest with only a flashlight at your side. Do be warned, you are not alone.
+    the forest with only a headlamp at your side. Do be warned, you are not alone.
 
 
     Controls:
@@ -730,14 +730,14 @@ MonoBehaviour:
     You run faster if you
     are looking in the direction of movement.
 
-    Your flashlight will glow red
-    if you are looking in the direction of a nearby page.
+    Your headlamp will glow red if
+    you are looking in the direction of a nearby page.
 
-    Your flashlight will
-    flicker if the unnamed should be close to you and you are not looking at it.
+    Your headlamp will flicker
+    if the unnamed should be close to you and you are not looking at it.
 
     Your
-    flashlight can slow the unnamed, but do not stare at the unnamed for too long.'
+    headlamp can slow the unnamed, but do not stare at the unnamed for too long.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a7055f295fd6b943a1227665cd6b35a, type: 2}
   m_sharedMaterial: {fileID: -5369315014221828116, guid: 6a7055f295fd6b943a1227665cd6b35a, type: 2}
@@ -893,7 +893,8 @@ MonoBehaviour:
   m_text: "Screech Sound Effect fromPixabay\nForest Ambience Sound Effect from Pixabay\nGrass
     Walking Sound Effect from Pixabay\nMenu Art Designed by Freepik\nForest Tileset
     by https://twitter.com/Namatnieks\nSound Effect by Jurij ON Pixabay\r\nSound
-    Effect by Sslc2022 FROM Pixabay\r\nCustom Font by Allouse.Studio \nhttps://www.fontspace.com/deathridge-font-f65255\r\n\r\n\n"
+    Effect by Sslc2022 FROM Pixabay\r\nCustom Font by Allouse.Studio \nhttps://www.fontspace.com/deathridge-font-f65255\r\n\rEnemy
+    Sprite by Sean Noonan\nPlayer Sprite by Tokka\nPaper Sprite From opengameart.com\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
